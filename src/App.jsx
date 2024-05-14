@@ -22,10 +22,20 @@ function App() {
       return;
     }
     // TODO: 사용자 리스트 상태를 업데이트 하세요. spread operator 를 사용하고, 추가되는 id는 현재 시간을 밀리초 단위로 반환하는 Date.now() 를 사용하세요.
+    const newUser = {
+      id: Date.now(),
+      name: userName,
+      age: userAge,
+    };
+    setUsers([...users, newUser]);
+    setUserName("");
+    setUserAge("");
   };
 
   const removeUser = (id) => {
     // TODO: filter 메소드를 사용해서 사용자 삭제 로직을 구현해 보세요.
+    const updatedUsers = users.filter((user) => user.id !== id);
+    setUsers(updatedUsers);
   };
 
   return (
@@ -34,13 +44,15 @@ function App() {
       <form onSubmit={addUser}>
         {/* TODO: input 태그에 value, onChange 속성을 추가해서 이름과 나이의 상태와 상태변경 로직을 연결하세요 */}
         <input
-          onChange={() => setUserName(userName)}
           type="text"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           placeholder="이름"
         />
         <input
-          onChange={() => setUserAge(userAge)}
           type="number"
+          value={userAge}
+          onChange={(e) => setUserAge(e.target.value)}
           placeholder="나이"
         />
         <button type="submit">사용자 추가</button>
@@ -48,6 +60,22 @@ function App() {
       <ul>
         {/* TODO: map 메소드를 이용해서 user 리스트를 렌더링하세요.  */}
         {/* 이름: John, 나이: 20 [삭제] 버튼이 하나의 행에 나올 수 있도록 해보세요. (hint: flex) */}
+        {users.map((user) => (
+          <li
+            key={user.id}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+              border: "1px solid black",
+            }}
+          >
+            <p>이름: {user.name}</p>
+            <p>나이: {user.age}</p>
+
+            <button onClick={() => removeUser(user.id)}>삭제</button>
+          </li>
+        ))}
       </ul>
     </>
   );
